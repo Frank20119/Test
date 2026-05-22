@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Excuse Generator 3000</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-color: #161b22;
+            --accent-color: #58a6ff;
+            --text-color: #c9d1d9;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            text-align: center;
+            background: var(--card-color);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #ff7b72;
+            margin-bottom: 30px;
+        }
+
+        .excuse-box {
+            min-height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            border-left: 4px solid var(--accent-color);
+            padding: 10px 20px;
+            margin-bottom: 30px;
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        button {
+            background-color: #238636;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #2ea44f;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            color: var(--accent-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: #30363d;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            background: #58a6ff;
+            color: #0d1117;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>// Dev_Excuse_Generator v3.0</h1>
+        <div class="excuse-box" id="excuse">Нажми на кнопку, чтобы спасти свой спринт...</div>
+        
+        <button id="generate-btn">Сгенерировать отмазку</button>
+        <button id="copy-btn" class="btn-secondary">Скопировать</button>
+    </div>
+
+    <div class="toast" id="toast">Скопировано! Скорее отправляй в Slack/Telegram</div>
+
+    <script>
+        const excuses = [
+            "Странно, на моей машине всё работает.",
+            "Это проблема с кэшем бэкенда, я тут ни при чем.",
+            "Я думал, этот баг пофиксили еще в прошлом релизе.",
+            "Это не баг, это экспериментальный UX-паттерн.",
+            "Тут надо всё переписывать, legacy-код держится на честном слове.",
+            "Этого не было в техническом задании.",
+            "Это из-за недавнего обновления Windows / macOS / Chrome.",
+            "Вчера работало. Я буквально ничего не трогал с тех пор!",
+            "Удаленный сервер отвечает слишком медленно, падает таймаут.",
+            "Это плавающий баг, он воспроизводится только в полнолуние.",
+            "Я проверял в Safari? Оу...",
+            "Git опять как-то странно смержил ветки.",
+            "Дизайнер утвердил именно такое поведение элементов."
+        ];
+
+        const excuseText = document.getElementById('excuse');
+        const generateBtn = document.getElementById('generate-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const toast = document.getElementById('toast');
+
+        function getNewExcuse() {
+            // Анимация затухания
+            excuseText.style.opacity = 0;
+            
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * excuses.length);
+                excuseText.innerText = excuses[randomIndex];
+                excuseText.style.opacity = 1;
+            }, 200);
+        }
+
+        generateBtn.addEventListener('click', getNewExcuse);
+
+        copyBtn.addEventListener('click', () => {
+            const text = excuseText.innerText;
+            if (text.includes('Нажми на кнопку')) return;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                toast.style.opacity = 1;
+                setTimeout(() => {
+                    toast.style.opacity = 0;
+                }, 2000);
+            });
+        });
+        
+        // Включаем плавное появление текста
+        excuseText.style.transition = "opacity 0.2s";
+    </script>
+</body>
+</html>
+
